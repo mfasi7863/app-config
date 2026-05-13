@@ -1,0 +1,13 @@
+namespace: terraform-aws-ecr
+
+image:
+  repository: 672296383659.dkr.ecr.ap-south-1.amazonaws.com/terraform-aws-ecr
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 80
+
+replicaCount: 2

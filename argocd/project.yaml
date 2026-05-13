@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: terraform-aws-project
+  namespace: argocd
+spec:
+  description: Project for terraform-aws-ecr application
+  sourceRepos:
+    - https://github.com/mfasi7863/app-config.git
+  destinations:
+    - namespace: terraform-aws-ecr
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

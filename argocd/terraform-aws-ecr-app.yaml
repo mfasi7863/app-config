@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: terraform-aws-ecr
+  namespace: argocd
+spec:
+  project: terraform-aws-project
+  source:
+    repoURL: https://github.com/mfasi7863/app-config.git
+    targetRevision: main
+    path: apps/terraform-aws-ecr
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: terraform-aws-ecr
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
