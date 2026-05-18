@@ -33,8 +33,6 @@ That means this repo is not just a place to store YAML files. It is the deployme
 
 ## End-to-end flow
 
-This is the core workflow of the project and the most important part of this repository.
-
 ```text
 Code change in K8s repo
         ↓
@@ -56,50 +54,6 @@ EKS pulls the new image from ECR and deploys the new version
 ```
 
 This is the part I wanted this project to highlight the most: the deployment happens through GitOps, but the image version is still updated automatically through Argo CD Image Updater.
-
----
-
-## What happens after a code change
-
-### 1. Application repo triggers the build
-
-The application source code is kept in a separate repository named `K8s`.
-
-Whenever code is changed there, the workflow file in that repository gets triggered, builds the container image, and pushes it to Amazon ECR using a new tag based on the latest `github.sha`.
-
-### 2. Image Updater watches ECR
-
-The Argo CD application in this repository is configured with Image Updater annotations.
-
-Once a new image appears in ECR, the image-updater controller picks up the latest matching tag, updates the Helm values reference in this repository, and writes the change back to Git.
-
-### 3. Argo CD syncs the cluster
-
-Since Argo CD is already watching this repository, the Git change becomes the new desired state.
-
-From there, Argo CD sync policy takes over, pulls the updated image from ECR, and rolls out the new version to the EKS cluster automatically.
-
----
-
-## Architecture overview
-
-```mermaid
-flowchart LR
-    A[K8s Repository] --> B[GitHub Actions]
-    B --> C[Build Docker Image]
-    C --> D[Push Image to Amazon ECR]
-    D --> E[Argo CD Image Updater]
-    E --> F[app-config Repository]
-    F --> G[Argo CD]
-    G --> H[Amazon EKS]
-    H --> I[terraform-aws-ecr Application]
-```
-
-This gives a clean separation of concerns:
-
-- **K8s repo** handles application code and image creation.
-- **app-config repo** handles deployment state.
-- **Argo CD** keeps EKS aligned with Git.
 
 ---
 
@@ -151,6 +105,46 @@ That means once the GitOps repository changes, the cluster updates itself withou
 
 ---
 
+## Screenshots
+
+### Argo CD application tile
+
+This shows the application registered in Argo CD and confirms that the app is both **Healthy** and **Synced**.
+
+![Argo CD Application Tile](assets/argocd-application-tile.jpg)
+
+### Argo CD resource tree
+
+The resource tree view shows Argo CD tracking the deployment, service account, service, replica sets, and running pods.
+
+![Argo CD Resource Tree](assets/argocd-resource-tree.jpg)
+
+### Synced application details
+
+This view confirms that the application is synced to the latest commit in the `app-config` repository and that Image Updater is participating in the commit history.
+
+![Argo CD Application Details](assets/argocd-application-details.jpg)
+
+### Image tag in running pod
+
+This screenshot is useful because it shows the running pod using the ECR image with the Git-based SHA tag, which is the core idea behind this flow.
+
+![Running Pod Image Tag](assets/argocd-running-pod-image.jpg)
+
+### Application endpoint
+
+This is the deployed application exposed through the Kubernetes `LoadBalancer` service.
+
+![Application Home Page](assets/kubeapp-home.jpg)
+
+### Sync policy and source configuration
+
+This confirms that the app is pulling from the correct repo path and that automated sync, prune, and self-heal are enabled.
+
+![Argo CD Sync Policy](assets/argocd-sync-policy.jpg)
+
+---
+
 ## Current deployment state
 
 Based on the latest cluster status:
@@ -169,46 +163,6 @@ The `terraform-aws-ecr` application is currently deployed in its own namespace w
 - 1 `LoadBalancer` service
 - 1 healthy deployment
 - External access exposed through an AWS ELB
-
----
-
-## Screenshots
-
-### Argo CD application tile
-
-This shows the application registered in Argo CD and confirms that the app is both **Healthy** and **Synced**.
-
-[image:1]
-
-### Argo CD resource tree
-
-The resource tree view shows Argo CD tracking the deployment, service account, service, replica sets, and running pods.
-
-[image:2]
-
-### Synced application details
-
-This view confirms that the application is synced to the latest commit in the `app-config` repository and that Image Updater is participating in the commit history.
-
-[image:3]
-
-### Image tag in running pod
-
-This screenshot is useful because it shows the running pod using the ECR image with the Git-based SHA tag, which is the core idea behind this flow.
-
-[image:4]
-
-### Application endpoint
-
-This is the deployed application exposed through the Kubernetes `LoadBalancer` service.
-
-[image:5]
-
-### Sync policy and source configuration
-
-This confirms that the app is pulling from the correct repo path and that automated sync, prune, and self-heal are enabled.
-
-[image:6]
 
 ---
 
