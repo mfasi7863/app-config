@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.repository
+    value: 672296383659.dkr.ecr.ap-south-1.amazonaws.com/terraform-aws-ecr
+    forcestring: true
+  - name: image.tag
+    value: 4ef87653398a27492ec1f861cbf335d100c606e1
+    forcestring: true
