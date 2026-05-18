@@ -111,7 +111,7 @@ That means once the GitOps repository changes, the cluster updates itself withou
 
 This shows the application registered in Argo CD and confirms that the app is both **Healthy** and **Synced**.
 
-![Argo CD Application Tile](assets/argocd-application-tile.jpg)
+![Argo CD Application Tile](assets/argocd-sync-policy.jpg)
 
 ### Argo CD resource tree
 
@@ -141,7 +141,7 @@ This is the deployed application exposed through the Kubernetes `LoadBalancer` s
 
 This confirms that the app is pulling from the correct repo path and that automated sync, prune, and self-heal are enabled.
 
-![Argo CD Sync Policy](assets/argocd-sync-policy.jpg)
+![Argo CD Sync Policy](assets/argocd-application-tile.jpg)
 
 ---
 
