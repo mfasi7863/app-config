@@ -2,7 +2,7 @@ namespace: terraform-aws-ecr
 
 image:
   repository: 672296383659.dkr.ecr.ap-south-1.amazonaws.com/terraform-aws-ecr
-  tag: latest
+  tag: <new-git-sha>
   pullPolicy: Always
 
 service:
