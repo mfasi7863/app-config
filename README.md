@@ -121,13 +121,13 @@ The resource tree view shows Argo CD tracking the deployment, service account, s
 
 ### Synced application details
 
-This view confirms that the application is synced to the latest commit in the `app-config` repository and that Image Updater is participating in the commit history.
+This shows that the application is synced to the latest commit in the `app-config` repository and that Image Updater is participating in the commit history.
 
 ![Argo CD Application Details](assets/argocd-application-details.jpg)
 
 ### Image tag in running pod
 
-This screenshot is useful because it shows the running pod using the ECR image with the Git-based SHA tag, which is the core idea behind this flow.
+This shows the running pod using the ECR image with the Git-based SHA tag, which is the core idea behind this flow.
 
 ![Running Pod Image Tag](assets/argocd-running-pod-image.jpg)
 
