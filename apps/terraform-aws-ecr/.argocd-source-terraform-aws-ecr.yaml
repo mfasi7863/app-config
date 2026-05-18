@@ -4,5 +4,5 @@ helm:
     value: 672296383659.dkr.ecr.ap-south-1.amazonaws.com/terraform-aws-ecr
     forcestring: true
   - name: image.tag
-    value: 4ef87653398a27492ec1f861cbf335d100c606e1
+    value: 4204da517db3b19f4d00001c3cb0521875c15ba0
     forcestring: true
